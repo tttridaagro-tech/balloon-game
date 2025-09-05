@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Balloon Pop Game</title>
+  <style>
+    body {
+      text-align: center;
+      font-family: Arial, sans-serif;
+      background: #cceeff;
+      margin: 0;
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+    }
+
+    h1 {
+      margin: 5px;
+      font-size: 5vw; /* масштаб під екран */
+    }
+
+    #game-area {
+      position: relative;
+      flex-grow: 1;
+      width: 100vw;
+      overflow: hidden;
+      background: linear-gradient(to top, #cceeff, #ffffff);
+      touch-action: manipulation; /* для швидкого кліку */
+    }
+
+    .balloon {
+      position: absolute;
+      width: 10vw;   /* масштаб по ширині екрана */
+      height: 14vw;  /* пропорції */
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: inset -5px -10px rgba(0,0,0,0.2);
+      transition: transform 0.2s;
+    }
+
+    .balloon:active {
+      transform: scale(0.9);
+    }
+
+    #score {
+      font-size: 5vw;
+      margin: 5px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎈 Лопай кульки 🎈</h1>
+  <div id="game-area"></div>
+  <p id="score">Очки: 0</p>
+
+  <script>
+    let gameArea = document.getElementById("game-area");
+    let scoreDisplay = document.getElementById("score");
+    let score = 0;
+
+    function randomColor() {
+      let colors = ["red", "blue", "green", "yellow", "purple", "orange"];
+      return colors[Math.floor(Math.random() * colors.length)];
+    }
+
+    function createBalloon() {
+      let balloon = document.createElement("div");
+      balloon.classList.add("balloon");
+      balloon.style.background = randomColor();
+
+      // випадкова позиція по ширині
+      let maxLeft = window.innerWidth - (window.innerWidth * 0.1); 
+      balloon.style.left = Math.random() * maxLeft + "px";
+      balloon.style.top = window.innerHeight + "px";
+
+      gameArea.appendChild(balloon);
+
+      let speed = window.innerHeight / 250; // швидкість залежить від висоти екрану
+
+      let move = setInterval(() => {
+        let top = parseFloat(balloon.style.top);
+        if (top < -100) {
+          balloon.remove();
+          clearInterval(move);
+        } else {
+          balloon.style.top = (top - speed) + "px";
+        }
+      }, 20);
+
+      balloon.addEventListener("touchstart", () => {
+        score++;
+        scoreDisplay.textContent = "Очки: " + score;
+        balloon.remove();
+        clearInterval(move);
+      });
+
+      // додатково для миші (на ПК)
+      balloon.addEventListener("click", () => {
+        score++;
+        scoreDisplay.textContent = "Очки: " + score;
+        balloon.remove();
+        clearInterval(move);
+      });
+    }
+
+    // створюємо нову кульку кожні 1.2 сек
+    setInterval(createBalloon, 1200);
+  </script>
+</body>
+</html>
