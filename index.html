@@ -1,116 +1,1016 @@
+<style>
+/* === Загальні стилі === */
+body {
+  margin: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: #f7f7f7;
+  color: #333;
+}
+
+/* === Шапка === */
+header {
+  background: linear-gradient(135deg, #7b42f6, #46c2ff);
+  color: #fff;
+  text-align: center;
+  padding: 25px 20px;
+}
+header h1 {
+  font-size: 2.5rem;
+  margin: 0;
+}
+header p {
+  margin: 10px 0 0;
+  font-size: 1.2rem;
+  font-weight: 300;
+}
+.header-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+.header-title img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+}
+
+/* === Основний блок (меню тем) === */
+main {
+  padding: 30px 20px;
+  text-align: center;
+  background: linear-gradient(135deg, #faeefd, #fefeff, #edf4ff);
+}
+h2 {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+/* === Картки тем === */
+.topics {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin-top: 30px;
+  margin-bottom: 50px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  border-radius: 16px;
+  padding: 25px;
+  text-align: center;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+  transition: transform 0.25s, box-shadow 0.25s;
+  color: #fff;
+}
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.18);
+}
+.icon img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  margin-bottom: 12px;
+  display: block;
+}
+.card h3 {
+  margin: 6px 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+.card p {
+  font-size: 1rem;
+  font-weight: 300;
+  margin: 8px 0 20px;
+}
+
+/* === Кнопки гри (оновлено) === */
+/* Кнопки */
+.play-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(255,255,255,0.25);
+  border: none;
+  border-radius: 12px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  color: #fff;
+  transition: background 0.3s, transform 0.2s;
+  backdrop-filter: blur(5px);
+}
+.play-btn:hover {
+  background: rgba(255,255,255,0.35);
+  transform: scale(1.05);
+}
+
+/* Контейнер для кнопок в ряд */
+.play-btn-group {
+  display: flex;
+  justify-content: center;
+  gap: 12px;       /* відстань між кнопками */
+  margin-top: auto;
+  flex-wrap: wrap; /* щоб на мобільному переносились */
+}
+
+/* 🎨 Кольори карток */
+.math { background: linear-gradient(135deg, #6fa9f9, #2d6cf3); }
+.ukr { background: linear-gradient(135deg, #f7ce63, #e09b10); }
+.eng { background: linear-gradient(135deg, #f27272, #c62828); }
+.nature { background: linear-gradient(135deg, #7cd77c, #3a8d3a); }
+.pe { background: linear-gradient(135deg, #ffa040, #e65100); }
+
+/* === Екран проходження тесту === */
+#quiz {
+  max-width: 500px;
+  margin: 40px auto;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+  overflow: hidden;
+  display: none;
+  flex-direction: column;
+}
+/* Верхня панель */
+.quiz-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(135deg, #7b42f6, #46c2ff);
+  color: #fff;
+  padding: 12px;
+}
+.back-btn {
+  background: rgba(255,255,255,0.2);
+  border: none;
+  color: #fff;
+  font-size: 1rem;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.back-btn:hover { background: rgba(255,255,255,0.35); }
+.quiz-info { display: flex; align-items: center; gap: 12px; }
+
+.back-btn-light {
+  background: linear-gradient(135deg, #7b42f6, #46c2ff);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.back-btn-light:hover {
+  background: linear-gradient(135deg, #5a2fc4, #1e88e5);
+}
+
+.quiz-timer {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+/* Прогрес-бар */
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: #eee;
+}
+.progress {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, #46c2ff, #7b42f6);
+  border-radius: 4px;
+  transition: width 0.4s ease;
+}
+/* Тіло */
+.quiz-body {
+  padding: 30px;
+  text-align: center;
+}
+.quiz-body h3 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+.quiz-image img {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  margin: 20px auto;
+  display: block;
+}
+/* Відповіді */
+.answers-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-top: 20px;
+}
+.answers-grid button {
+  background: #f5f5f5;
+  border: 2px solid #ddd;
+  border-radius: 12px;
+  padding: 14px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.answers-grid button:hover {
+  background: #eaeaea;
+  border-color: #bbb;
+}
+.answers-grid button.correct {
+  background: #c8f7c5;
+  border-color: #34a853;
+}
+.answers-grid button.wrong {
+  background: #f7c5c5;
+  border-color: #ea4335;
+}
+/* Зворотній зв'язок */
+.quiz-feedback {
+  background: #f9f9f9;
+  border-top: 1px solid #ddd;
+  padding: 20px;
+  text-align: center;
+}
+.quiz-feedback p {
+  font-size: 1.1rem;
+  margin-bottom: 12px;
+}
+.quiz-feedback button {
+  background: #7b42f6;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.quiz-feedback button:hover { background: #5a2fc4; }
+/* Нижня панель */
+.quiz-footer {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 20px;
+  background: #fafafa;
+  border-top: 1px solid #eee;
+  font-size: 0.95rem;
+}
+
+/* === Вибір рівня === */
+#level-select {
+  display: none;
+  text-align: center;
+  background: linear-gradient(135deg, #f9f9ff, #f3f7ff);
+}
+#level-select h2 {
+  font-size: 2rem;
+  margin-bottom: 8px;
+  color: #333;
+}
+#level-select p {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 30px;
+}
+.levels {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+  max-width: 950px;
+  margin: 28 auto 20px;
+}
+.level-card {
+  position: relative;
+  border-radius: 20px;
+  padding: 15px 20px 15px;
+  text-align: center;
+  background: #fff;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  transition: transform 0.25s, box-shadow 0.25s;
+}
+.level-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+}
+
+.level-icon {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  margin: 0 auto 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  color: #fff;
+}
+/* Кольори */
+.level-easy .level-icon { background: linear-gradient(135deg, #6dd36d, #3b8d3b); }
+.level-easy h3 { color: #2c7c2c; }
+.level-easy .level-btn { background: #3b8d3b; }
+.level-easy .level-btn:hover { background: #289528; }
+
+.level-medium .level-icon { background: linear-gradient(135deg, #f7c34c, #e68a00); }
+.level-medium h3 { color: #d47a00; }
+.level-medium .level-btn { background: #e68a00; }
+.level-medium .level-btn:hover { background: #f08100; }
+
+.level-hard .level-icon { background: linear-gradient(135deg, #f27272, #b83232); }
+.level-hard h3 { color: #b83232; }
+.level-hard .level-btn { background: #b83232; }
+.level-hard .level-btn:hover { background: #d61818; }
+
+.level-card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+.level-card p {
+  font-size: 1rem;
+  color: #555;
+  margin: 6px 0;
+}
+.level-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 15px 0;
+  color: #444;
+  font-size: 0.95rem;
+}
+.level-card ul li {
+  margin: 6px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.level-card ul li::before {
+  content: "✔";
+  color: #4caf50;
+  font-weight: bold;
+}
+.level-btn {
+  margin-top: 12px;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 20px;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: background 0.3s, transform 0.2s;
+}
+.level-btn:hover { transform: scale(1.05); }
+#level-select .back-btn { margin-top: 20px; }
+
+/* === Фінальний екран гри === */
+.game-summary {
+  max-width: 500px;
+  margin: 50px auto;
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  padding: 30px;
+  text-align: center;
+  animation: fadeIn 0.4s ease;
+}
+
+.game-summary h2 {
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 20px;
+  margin-top: 0px;
+}
+
+.summary-topic {
+  font-size: 1.1rem;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.game-summary h3 {
+  font-size: 1.5rem;
+  margin: 10px 0;
+  color: #222;
+}
+
+#summary-message {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin: 10px 0 20px;
+  color: #e67e22;
+}
+
+.summary-score {
+  background: #fff7e0;
+  color: #d35400;
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 12px;
+  border-radius: 12px;
+  margin: 20px auto;
+  width: fit-content;
+}
+
+.summary-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.summary-stats div {
+  background: #f9f9f9;
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #444;
+}
+
+.summary-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+.summary-buttons button {
+  border: none;
+  border-radius: 10px;
+  padding: 12px 22px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.3s;
+}
+
+.summary-buttons button:first-child {
+  background: linear-gradient(135deg, #7b42f6, #46c2ff);
+  color: #fff;
+  transition: background 0.3s;
+}
+
+.summary-buttons button:first-child:hover {
+  background: linear-gradient(135deg, #5a2fc4, #1e88e5);
+  }
+
+.summary-buttons button:last-child {
+  background: #f3f3f3;
+  color: #333;
+}
+
+.summary-buttons button:last-child:hover {
+  background: #e0e0e0;
+  transform: scale(1.05);
+}
+
+/* Анімація появи */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+  /* Картки тем */
+  .topics {
+    grid-template-columns: 1fr;
+    max-width: 100%;
+  }
+
+  /* Вибір рівня */
+  .levels {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 0 15px;
+  }
+  .level-card {
+    padding: 20px;
+  }
+
+  /* Тестове вікно */
+  #quiz {
+    margin: 20px 10px;
+    width: auto;
+    max-width: 100%;
+    border-radius: 12px;
+  }
+  .quiz-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .quiz-info {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .quiz-body {
+    padding: 20px 15px;
+  }
+  .answers-grid {
+    grid-template-columns: 1fr;
+  }
+  .quiz-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  /* Фінальний екран */
+  .game-summary {
+    margin: 20px 10px;
+    padding: 20px 15px;
+    border-radius: 12px;
+  }
+  .summary-stats {
+    grid-template-columns: 1fr;
+  }
+  .summary-buttons {
+    flex-direction: column;
+  }
+  .summary-buttons button {
+    width: 100%;
+  }
+}
+</style>
+
+
 <!DOCTYPE html>
 <html lang="uk">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Balloon Pop Game</title>
-  <style>
-    body {
-      text-align: center;
-      font-family: Arial, sans-serif;
-      background: #cceeff;
-      margin: 0;
-      overflow: hidden;
-      height: 100vh;
-      width: 100vw;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: center;
-    }
-
-    h1 {
-      margin: 5px;
-      font-size: 5vw; /* масштаб під екран */
-    }
-
-    #game-area {
-      position: relative;
-      flex-grow: 1;
-      width: 100vw;
-      overflow: hidden;
-      background: linear-gradient(to top, #cceeff, #ffffff);
-      touch-action: manipulation; /* для швидкого кліку */
-    }
-
-    .balloon {
-      position: absolute;
-      width: 10vw;   /* масштаб по ширині екрана */
-      height: 14vw;  /* пропорції */
-      border-radius: 50%;
-      cursor: pointer;
-      box-shadow: inset -5px -10px rgba(0,0,0,0.2);
-      transition: transform 0.2s;
-    }
-
-    .balloon:active {
-      transform: scale(0.9);
-    }
-
-    #score {
-      font-size: 5vw;
-      margin: 5px;
-      font-weight: bold;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ребус-гра</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>🎈 Лопай кульки 🎈</h1>
-  <div id="game-area"></div>
-  <p id="score">Очки: 0</p>
+  <!-- === Шапка === -->
+  <header>
+    <div class="header-title">
+      <img src="images/logoheader.png" alt="Логотип" />
+      <h1>Ребус-гра</h1>
+    </div>
+    <p>Розгадай ребуси та вивчай нові речі!</p>
+  </header>
 
-  <script>
-    let gameArea = document.getElementById("game-area");
-    let scoreDisplay = document.getElementById("score");
-    let score = 0;
+  <!-- === Меню тем === -->
+  <main id="menu">
+    <h2>Оберіть тему:</h2>
+    <p>Яка тема цікавить вас найбільше?</p>
 
-    function randomColor() {
-      let colors = ["red", "blue", "green", "yellow", "purple", "orange"];
-      return colors[Math.floor(Math.random() * colors.length)];
-    }
+    <div class="topics">
+      <div class="card math">
+        <div class="icon">
+          <img src="images/math.png" alt="Математика" />
+        </div>
+        <h3>Математика</h3>
+        <p>Числа, рівняння та геометрія</p>
+        <div class="play-btn-group">
+         <button class="play-btn test" onclick="chooseLevel('math','test')">Тести</button>
+         <button class="play-btn task" onclick="chooseLevel('math','task')">Задачі</button>
+       </div>
+      </div>
 
-    function createBalloon() {
-      let balloon = document.createElement("div");
-      balloon.classList.add("balloon");
-      balloon.style.background = randomColor();
+      <div class="card ukr">
+        <div class="icon">
+          <img src="images/Ukraine.png" alt="Українська" />
+        </div>
+        <h3>Українська мова</h3>
+        <p>Слова, граматика</p>
+        <div class="play-btn-group">
+         <button class="play-btn test" onclick="chooseLevel('math','test')">Тести</button>
+         <button class="play-btn task" onclick="chooseLevel('math','task')">Граматика</button>
+       </div>
+      </div>
 
-      // випадкова позиція по ширині
-      let maxLeft = window.innerWidth - (window.innerWidth * 0.1); 
-      balloon.style.left = Math.random() * maxLeft + "px";
-      balloon.style.top = window.innerHeight + "px";
+      <div class="card eng">
+        <div class="icon">
+          <img src="images/English.png" alt="Англійська" />
+        </div>
+        <h3>Англійська</h3>
+        <p>English words and grammar</p>
+        <div class="play-btn-group">
+         <button class="play-btn test" onclick="chooseLevel('math','test')">Тести</button>
+         <button class="play-btn task" onclick="chooseLevel('math','task')">Граматика</button>
+       </div>
+      </div>
 
-      gameArea.appendChild(balloon);
+      <div class="card nature">
+        <div class="icon">
+          <img src="images/Nature.png" alt="Природа" />
+        </div>
+        <h3>Природознавство</h3>
+        <p>Природа, тварини та рослини</p>
+        <div class="play-btn-group">
+         <button class="play-btn test" onclick="chooseLevel('math','test')">Тести</button>
+         <button class="play-btn task" onclick="chooseLevel('math','task')">Задачі</button>
+       </div>
+      </div>
 
-      let speed = window.innerHeight / 250; // швидкість залежить від висоти екрану
+      <div class="card pe">
+        <div class="icon">
+          <img src="images/Sport.png" alt="Фізична культура" />
+        </div>
+        <h3>Фізична культура</h3>
+        <p>Спорт, здоров'я та рух</p>
+        <div class="play-btn-group">
+         <button class="play-btn test" onclick="chooseLevel('math','test')">Тести</button>
+         <button class="play-btn task" onclick="chooseLevel('math','task')">Задачі</button>
+       </div>
+      </div>
+    </div>
+  </main>
 
-      let move = setInterval(() => {
-        let top = parseFloat(balloon.style.top);
-        if (top < -100) {
-          balloon.remove();
-          clearInterval(move);
-        } else {
-          balloon.style.top = (top - speed) + "px";
-        }
-      }, 20);
+  <!-- === Вибір рівня === -->
+  <section id="level-select" style="display:none;">
+    <h2>Який рівень обираєте?</h2>
+    <div class="levels">
+      <!-- Легкий -->
+      <div class="level-card level-easy">
+        <div class="level-icon">⭐</div>
+        <h3>Легкий</h3>
+        <p id="easy-desc">Прості ребуси для початківців</p>
+        <ul>
+          <li>⏱ час не обмежений</li>
+          <li>📌 10 питань</li>
+          <li>🧒 7-9 років</li>
+        </ul>
+        <button class="level-btn" onclick="startGame('easy')">Почати легкий рівень</button>
+      </div>
 
-      balloon.addEventListener("touchstart", () => {
-        score++;
-        scoreDisplay.textContent = "Очки: " + score;
-        balloon.remove();
-        clearInterval(move);
-      });
+      <!-- Середній -->
+      <div class="level-card level-medium">
+        <div class="level-icon">⚡</div>
+        <h3>Середній</h3>
+        <p id="medium-desc">Помірно складні завдання</p>
+        <ul>
+          <li>⏱ 15 секунд на питання</li>
+          <li>📌 20 питань</li>
+          <li>🧑 15-17 років</li>
+        </ul>
+        <button class="level-btn" onclick="startGame('medium')">Почати середній рівень</button>
+      </div>
 
-      // додатково для миші (на ПК)
-      balloon.addEventListener("click", () => {
-        score++;
-        scoreDisplay.textContent = "Очки: " + score;
-        balloon.remove();
-        clearInterval(move);
-      });
-    }
+      <!-- Складний -->
+      <div class="level-card level-hard">
+        <div class="level-icon">👑</div>
+        <h3>Складний</h3>
+        <p id="hard-desc">Виклик для справжніх експертів</p>
+        <ul>
+          <li>⏱ 10 секунд на питання</li>
+          <li>📌 40 питань</li>
+          <li>🧑‍🎓 Від 18 років</li>
+        </ul>
+        <button class="level-btn" onclick="startGame('hard')">Почати складний рівень</button>
+      </div>
+    </div>
+    <button class="back-btn-light" onclick="backToMenu()">← Назад до тем</button>
+  </section>
 
-    // створюємо нову кульку кожні 1.2 сек
-    setInterval(createBalloon, 1200);
-  </script>
+  <!-- === Екран гри === -->
+  <section id="quiz" style="display:none;">
+    <div class="quiz-header">
+      <button class="back-btn" onclick="backToMenu()">← В меню</button>
+      <div class="quiz-info">
+        <div>
+          <h2 id="quiz-title">Назва теми</h2>
+          <p id="quiz-progress-text">Питання 1 із ?</p>
+        </div>
+      </div>
+      <div class="quiz-timer" id="quiz-timer">⏱ 0с</div>
+    </div>
+
+    <div class="progress-bar"><div class="progress" id="progress"></div></div>
+
+    <div class="quiz-body">
+      <h3 id="question">Тут буде питання</h3>
+      <div class="answers-grid" id="answers"></div>
+    </div>
+
+    <div class="quiz-feedback" id="result" style="display:none;">
+      <p id="feedback-text"></p>
+      <button id="next-btn" onclick="nextQuestion()">Наступне</button>
+    </div>
+
+    <div class="quiz-footer">
+      <p id="score">Ваш рахунок: 0</p>
+    </div>
+  </section>
+
+  <div class="game-summary" id="game-summary" style="display:none;">
+    <h2>🏁 Гру закінчено!</h2>
+    <h3>🎉 Ваш результат: <span id="summary-correct"></span> із <span id="summary-total"></span></h3>
+    <p id="summary-message"></p>
+    <div class="summary-score">Загальний рахунок: <span id="summary-score"></span></div>
+  
+    <div class="summary-stats">
+      <div>✅ Правильні: <span id="summary-right"></span></div>
+      <div>❌ Помилки: <span id="summary-wrong"></span></div>
+      <div>🎯 Точність: <span id="summary-accuracy"></span></div>
+      <div>⏱ Середній час: <span id="summary-time"></span></div>
+    </div>
+
+    <div class="summary-buttons">
+      <button onclick="restartGame()">🔄 Грати ще раз</button>
+      <button onclick="backToMenu()">🏠 В меню</button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
 </body>
 </html>
+
+
+
+<script>
+// === Глобальні змінні ===
+let current = 0;
+let score = 0;
+let correctAnswers = 0;
+let currentQuestions = [];
+let currentTopic = "";
+let currentMode = ""; // test | task
+let currentLevel = ""; // easy | medium | hard
+let streak = 0;
+let timerInterval;
+let elapsedTime = 0;
+let timeLimit = 0; // обмеження часу на питання
+
+// === Приклади питань ===
+const questionsData = {
+  math: {
+    test: {
+      easy: [
+        { q: "2+2=?", answers: ["3", "4", "5"], correct: "4" },
+        { q: "5×3=?", answers: ["8", "15", "10"], correct: "15" }
+      ],
+      medium: [
+        { q: "12÷4=?", answers: ["2", "3", "4"], correct: "3" },
+        { q: "√81=?", answers: ["7", "8", "9"], correct: "9" }
+      ],
+      hard: [
+        { q: "Інтеграл ∫x dx?", answers: ["x²/2 + C", "2x + C", "ln(x)"], correct: "x²/2 + C" }
+      ]
+    },
+    task: {
+      easy: [
+        { q: "Задача 1: У Петра було 5 яблук, він дав 2. Скільки залишилось?", answers: ["3"] },
+        { q: "Задача 2: У класі 10 учнів, ще 5 прийшли. Скільки стало?", answers: ["15"] }
+      ],
+      medium: [
+        { q: "Задача 1: Розв’яжіть: 2x + 5 = 15", answers: ["5"] }
+      ],
+      hard: [
+        { q: "Задача 1: Розв’яжіть: ∫(2x) dx", answers: ["x² + C"] }
+      ]
+    }
+  }
+};
+
+// === Вибір теми та режиму (тести/задачі) ===
+function chooseLevel(topic, mode) {
+  currentTopic = topic;
+  currentMode = mode;
+
+  document.getElementById("menu").style.display = "none";
+  document.getElementById("level-select").style.display = "block";
+
+  // Змінюємо описи під рівнями залежно від режиму
+  if (mode === "test") {
+    document.getElementById("easy-desc").textContent = "10 питань • час не обмежений";
+    document.getElementById("medium-desc").textContent = "20 питань • 15 секунд на відповідь";
+    document.getElementById("hard-desc").textContent = "40 питань • 10 секунд на відповідь";
+  } else {
+    document.getElementById("easy-desc").textContent = "5 задач • рівень 3–5 клас";
+    document.getElementById("medium-desc").textContent = "5 задач • рівень 8–11 клас";
+    document.getElementById("hard-desc").textContent = "3 задачі • рівень університету";
+  }
+}
+
+// === Запуск гри ===
+function startGame(level) {
+  currentLevel = level;
+  current = 0;
+  score = 0;
+  correctAnswers = 0;
+  streak = 0;
+  elapsedTime = 0;
+
+  // Вибір питань
+  currentQuestions = questionsData[currentTopic][currentMode][currentLevel] || [];
+
+  // Таймер
+  clearInterval(timerInterval);
+  if (currentMode === "test") {
+    if (level === "easy") timeLimit = 0;
+    if (level === "medium") timeLimit = 15;
+    if (level === "hard") timeLimit = 10;
+  } else {
+    timeLimit = 0; // для задач без ліміту
+  }
+
+  document.getElementById("level-select").style.display = "none";
+  document.getElementById("quiz").style.display = "flex";
+  document.getElementById("game-summary").style.display = "none"; // сховати фінальний екран
+  document.getElementById("score").textContent = "Очки: 0xp";
+
+  // Глобальний таймер проходження
+  timerInterval = setInterval(() => {
+    elapsedTime++;
+    document.getElementById("quiz-timer").textContent = `⏱ ${elapsedTime}с`;
+  }, 1000);
+
+  updateProgress();
+  showQuestion();
+}
+
+// === Показ питання ===
+function showQuestion() {
+  document.getElementById("result").style.display = "none"; 
+  document.getElementById("result").textContent = "";
+
+  let q = currentQuestions[current];
+  if (!q) return endGame();
+
+  document.getElementById("quiz-title").textContent = currentTopic.toUpperCase();
+  document.getElementById("question").textContent = q.q;
+
+  let answersDiv = document.getElementById("answers");
+  answersDiv.innerHTML = "";
+
+  // Для тестів – варіанти, для задач – поле вводу
+  if (currentMode === "test") {
+    q.answers.forEach(ans => {
+      let btn = document.createElement("button");
+      btn.textContent = ans;
+      btn.classList.add("answer-btn");
+      btn.onclick = () => checkAnswer(ans, btn);
+      answersDiv.appendChild(btn);
+    });
+  } else {
+    let input = document.createElement("input");
+    input.type = "text";
+    input.placeholder = "Ваша відповідь";
+    input.id = "task-answer";
+    input.style.padding = "10px";
+    input.style.fontSize = "1rem";
+
+    let submitBtn = document.createElement("button");
+    submitBtn.textContent = "Перевірити";
+    submitBtn.classList.add("level-btn");
+    submitBtn.onclick = () => checkTaskAnswer(input.value);
+
+    answersDiv.appendChild(input);
+    answersDiv.appendChild(submitBtn);
+  }
+
+  document.getElementById("quiz-progress-text").textContent =
+    `${currentMode === "test" ? "Питання" : "Задача"} ${current + 1} із ${currentQuestions.length}`;
+}
+
+// === Перевірка відповіді (тести) ===
+function checkAnswer(ans, button) {
+  let correctAnswer = currentQuestions[current].correct;
+  let allButtons = document.querySelectorAll(".answer-btn");
+
+  allButtons.forEach(btn => {
+    btn.disabled = true; 
+    if (btn.textContent === correctAnswer) {
+      btn.classList.add("correct"); 
+    } else if (btn === button) {
+      btn.classList.add("wrong"); 
+    }
+  });
+
+  document.getElementById("result").style.display = "block";
+
+  if (ans === correctAnswer) {
+    streak++;
+    correctAnswers++;
+    let gained = 10 + (streak - 1) * 5;
+    score += gained;
+    document.getElementById("result").textContent = `✅ Правильно! (+${gained}xp)`;
+  } else {
+    streak = 0;
+    document.getElementById("result").textContent = "❌ Помилка!";
+  }
+
+  document.getElementById("score").textContent = "Очки: " + score + "xp";
+
+  // Автоматичний перехід
+  setTimeout(nextQuestion, ans === correctAnswer ? 500 : 1000);
+}
+
+// === Перевірка відповіді (задачі) ===
+function checkTaskAnswer(userAnswer) {
+  let correctAnswer = currentQuestions[current].answers[0];
+
+  document.getElementById("result").style.display = "block";
+
+  if (userAnswer.trim().toLowerCase() === correctAnswer.trim().toLowerCase()) {
+    correctAnswers++;
+    score += 20;
+    document.getElementById("result").textContent = `✅ Правильно! (+20xp)`;
+  } else {
+    document.getElementById("result").textContent = `❌ Помилка! Правильна відповідь: ${correctAnswer}`;
+  }
+
+  document.getElementById("score").textContent = "Очки: " + score + "xp";
+
+  setTimeout(nextQuestion, 1500);
+}
+
+// === Наступне питання ===
+function nextQuestion() {
+  current++;
+  if (current < currentQuestions.length) {
+    updateProgress();
+    showQuestion();
+  } else {
+    endGame();
+  }
+}
+
+// === Кінець гри ===
+function endGame() {
+  clearInterval(timerInterval);
+
+  // Ховаємо екран гри
+  document.getElementById("quiz").style.display = "none";
+
+  // Показуємо фінальне вікно
+  const summary = document.getElementById("game-summary");
+  summary.style.display = "block";
+
+  // Заголовок в залежності від режиму
+  const titleEl = summary.querySelector("h2");
+  if (currentMode === "test") {
+    titleEl.textContent = "Тест закінчено!";
+  } else {
+    titleEl.textContent = "Задачі закінчено!";
+  }
+
+  // Прибираємо блок з темою (він більше не потрібен)
+  const topicEl = document.querySelector(".summary-topic");
+  if (topicEl) topicEl.style.display = "none";
+
+  // Заповнюємо статистику
+  document.getElementById("summary-correct").textContent = correctAnswers;
+  document.getElementById("summary-total").textContent = currentQuestions.length;
+  document.getElementById("summary-score").textContent = score + "xp";
+  document.getElementById("summary-right").textContent = correctAnswers;
+  document.getElementById("summary-wrong").textContent = currentQuestions.length - correctAnswers;
+  document.getElementById("summary-accuracy").textContent =
+    Math.round((correctAnswers / currentQuestions.length) * 100) + "%";
+  document.getElementById("summary-time").textContent =
+    (elapsedTime / currentQuestions.length).toFixed(1) + "с";
+
+  // Повідомлення залежно від результату
+  const accuracy = correctAnswers / currentQuestions.length;
+  let message = "";
+  if (accuracy === 1) {
+    message = "🌟 Ідеально! Ти справжній майстер!";
+  } else if (accuracy >= 0.6) {
+    message = "👏 Дуже добре, але можна ще краще!";
+  } else {
+    message = "💡 Потрібно попрактикуватися!";
+  }
+  document.getElementById("summary-message").textContent = message;
+
+  updateProgress(true);
+}
+
+// === Перезапуск гри ===
+function restartGame() {
+  document.getElementById("game-summary").style.display = "none";
+  startGame(currentLevel);
+}
+
+// === Повернення назад ===
+function backToMenu() {
+  clearInterval(timerInterval);
+  document.getElementById("quiz").style.display = "none";
+  document.getElementById("level-select").style.display = "none";
+  document.getElementById("game-summary").style.display = "none";
+  document.getElementById("menu").style.display = "block";
+}
+
+// === Прогрес-бар ===
+function updateProgress(finished = false) {
+  let progress = document.getElementById("progress");
+  let percent = finished ? 100 : (current / currentQuestions.length) * 100;
+  progress.style.width = percent + "%";
+}
+</script>
